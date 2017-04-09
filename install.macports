@@ -54,5 +54,5 @@ sudo port -N -v selfupdate
 
 dir="$PWD"
 cd -
-rm -fr $dir
+sudo rm -fr $dir
 
