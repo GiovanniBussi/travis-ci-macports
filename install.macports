@@ -5,10 +5,13 @@ set -x
 
 cd "$(mktemp -d)"
 
-OSX_VERSION="$(sw_vers -productVersion | sed 's/\.[^\.]*$//')"
 MACPORTS_VERSION=2.4.1
-OSX_NAME=ElCapitan
-if test "$OSX_VERSION" == 10.11 ; then
+
+OSX_VERSION="$(sw_vers -productVersion | sed 's/\.[^\.]*$//')"
+
+if test "$OSX_VERSION" == 10.10 ; then
+  OSX_NAME=Yosemite
+elif test "$OSX_VERSION" == 10.11 ; then
   OSX_NAME=ElCapitan
 elif test "$OSX_VERSION" == 10.12 ; then
   OSX_NAME=Sierra
@@ -19,14 +22,28 @@ fi
 
 MACPORTS_PKG=MacPorts-${MACPORTS_VERSION}-${OSX_VERSION}-${OSX_NAME}.pkg
 
+#  - if test -n "$PLUMED_MACPORTS" ; then wget https://distfiles.macports.org/MacPorts/MacPorts-2.3.4.tar.bz2 && tar xvfj MacPorts-2.3.4.   tar.bz2 ; fi
+#  - if test -n "$PLUMED_MACPORTS" ; then cd MacPorts-2.3.4 && ./configure && sudo make install && cd - && sudo rm -fr MacPorts-2.3.4 ; fi
+
+if test "$1" = --source ; then
+# download source:
+  wget https://distfiles.macports.org/MacPorts/MacPorts-${MACPORTS_VERSION}.tar.bz2
+  tar xvfj MacPorts-${MACPORTS_VERSION}.tar.bz2
+  cd MacPorts-${MACPORTS_VERSION}
+# install
+  ./configure && sudo make install
+else
 # download installer:
-wget https://distfiles.macports.org/MacPorts/$MACPORTS_PKG
+  wget https://distfiles.macports.org/MacPorts/$MACPORTS_PKG
 # install:
-sudo installer -pkg $MACPORTS_PKG -target /
+  sudo installer -pkg $MACPORTS_PKG -target /
+fi
 
 # update:
-export PATH=/opt/local/bin:$PATH
+export PATH=/opt/local/bin:"$PATH"
 sudo port -N -v selfupdate
 
-
+dir="$PWD"
+cd -
+rm -fr $dir
 
