@@ -2,8 +2,6 @@ language: objective-c
 
 matrix:
   include:
-  - osx_image: xcode6.4
-    env: FROM_SOURCE=no
   - osx_image: xcode7.3
     env: FROM_SOURCE=no
   - osx_image: xcode8gm
@@ -14,8 +12,6 @@ matrix:
     env: FROM_SOURCE=no
   - osx_image: xcode8.3
     env: FROM_SOURCE=no
-  - osx_image: xcode6.4
-    env: FROM_SOURCE=--source
   - osx_image: xcode7.3
     env: FROM_SOURCE=--source
   - osx_image: xcode8gm
