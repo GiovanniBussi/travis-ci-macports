@@ -37,10 +37,10 @@ MACPORTS_PKG=MacPorts-${MACPORTS_VERSION}-${OSX_VERSION}-${OSX_NAME}.pkg
 if test "$SOURCE" = yes ; then
 # download source:
   wget https://distfiles.macports.org/MacPorts/MacPorts-${MACPORTS_VERSION}.tar.bz2
-  tar xvfj MacPorts-${MACPORTS_VERSION}.tar.bz2
+  tar xjf MacPorts-${MACPORTS_VERSION}.tar.bz2
   cd MacPorts-${MACPORTS_VERSION}
 # install
-  ./configure && sudo make install
+  ./configure >/dev/null && sudo make install >/dev/null
 else
 # download installer:
   wget https://distfiles.macports.org/MacPorts/$MACPORTS_PKG
