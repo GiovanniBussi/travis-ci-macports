@@ -41,9 +41,14 @@ fi
 
 MACPORTS_PKG=MacPorts-${MACPORTS_VERSION}-${OSX_VERSION}-${OSX_NAME}.pkg
 
+URL="https://github.com/macports/macports-base/releases/download/v$MACPORTS_VERSION/"
+URL="https://distfiles.macports.org/MacPorts"
+
+# github: https://github.com/macports/macports-base/releases/download/v2.4.1/MacPorts-2.4.1.tar.gz
+
 if test "$SOURCE" = yes ; then
 # download source:
-  wget https://distfiles.macports.org/MacPorts/MacPorts-${MACPORTS_VERSION}.tar.bz2
+  wget $URL/MacPorts-${MACPORTS_VERSION}.tar.bz2
   tar xjf MacPorts-${MACPORTS_VERSION}.tar.bz2
   cd MacPorts-${MACPORTS_VERSION}
 # install
@@ -51,7 +56,7 @@ if test "$SOURCE" = yes ; then
   sudo make install >/dev/null
 else
 # download installer:
-  wget https://distfiles.macports.org/MacPorts/$MACPORTS_PKG
+  wget $URL/$MACPORTS_PKG
 # install:
   sudo installer -pkg $MACPORTS_PKG -target /
 fi
