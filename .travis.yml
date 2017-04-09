@@ -3,15 +3,15 @@ language: objective-c
 matrix:
   include:
   - osx_image: xcode7.3
-    env: OPT=
+    env: OPT=--binary
   - osx_image: xcode8gm
-    env: OPT=
+    env: OPT=--binary
   - osx_image: xcode8.1
-    env: OPT=
+    env: OPT=--binary
   - osx_image: xcode8.2
-    env: OPT=
+    env: OPT=--binary
   - osx_image: xcode8.3
-    env: OPT=
+    env: OPT=--binary
   - osx_image: xcode7.3
     env: OPT=--source
   - osx_image: xcode8gm
