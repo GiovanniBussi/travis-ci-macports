@@ -3,25 +3,25 @@ language: objective-c
 matrix:
   include:
   - osx_image: xcode7.3
-    env: FROM_SOURCE=no
+    env: OPT=
   - osx_image: xcode8gm
-    env: FROM_SOURCE=no
+    env: OPT=
   - osx_image: xcode8.1
-    env: FROM_SOURCE=no
+    env: OPT=
   - osx_image: xcode8.2
-    env: FROM_SOURCE=no
+    env: OPT=
   - osx_image: xcode8.3
-    env: FROM_SOURCE=no
+    env: OPT=
   - osx_image: xcode7.3
-    env: FROM_SOURCE=--source
+    env: OPT=--source
   - osx_image: xcode8gm
-    env: FROM_SOURCE=--source
+    env: OPT=--source
   - osx_image: xcode8.1
-    env: FROM_SOURCE=--source
+    env: OPT=--source
   - osx_image: xcode8.2
-    env: FROM_SOURCE=--source
+    env: OPT=--source
   - osx_image: xcode8.3
-    env: FROM_SOURCE=--source
+    env: OPT=--source
 
 script:
-  - ./install.macports "$FROM_SOURCE"
+  - ./install.macports "$OPT"
