@@ -41,8 +41,8 @@ fi
 
 MACPORTS_PKG=MacPorts-${MACPORTS_VERSION}-${OSX_VERSION}-${OSX_NAME}.pkg
 
-URL="https://github.com/macports/macports-base/releases/download/v$MACPORTS_VERSION/"
 URL="https://distfiles.macports.org/MacPorts"
+URL="https://github.com/macports/macports-base/releases/download/v$MACPORTS_VERSION/"
 
 # github: https://github.com/macports/macports-base/releases/download/v2.4.1/MacPorts-2.4.1.tar.gz
 
