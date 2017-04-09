@@ -18,7 +18,7 @@ do
   esac
 done
 
-if test "$MACPORTS_PREFIX" != /opt/local
+if test "$MACPORTS_PREFIX" != /opt/local ; then
   echo "Installing on non standard prefix can be only made from sources"
   SOURCE=yes
 fi
