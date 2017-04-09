@@ -1,0 +1,32 @@
+#! /bin/bash
+
+set -e
+set -x
+
+cd "$(mktemp -d)"
+
+OSX_VERSION="$(sw_vers -productVersion | sed 's/\.[^\.]*$//')"
+MACPORTS_VERSION=2.4.1
+OSX_NAME=ElCapitan
+if test "$OSX_VERSION" == 10.11 ; then
+  OSX_NAME=ElCapitan
+elif test "$OSX_VERSION" == 10.12 ; then
+  OSX_NAME=Sierra
+else
+  echo "unknown OSX version"
+  exit 1
+fi
+
+MACPORTS_PKG=MacPorts-${MACPORTS_VERSION}-${OSX_VERSION}-${OSX_NAME}.pkg
+
+# download installer:
+wget https://distfiles.macports.org/MacPorts/$MACPORTS_PKG
+# install:
+sudo installer -pkg $MACPORTS_PKG -target /
+
+# update:
+export PATH=/opt/local/bin:$PATH
+sudo port -N -v selfupdate
+
+
+
