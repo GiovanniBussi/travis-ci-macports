@@ -35,3 +35,5 @@ matrix:
 
 script:
   - ./install.macports "$OPT"
+# install a small port for test:
+  - sudo port -N install xdrfile
