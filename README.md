@@ -16,7 +16,7 @@ Installing MacPorts
 
 Put the following commands in your `.travis.yml` file:
 
-     - EXPORT COLUMNS=80
+     - export COLUMNS=80
      - wget https://raw.githubusercontent.com/GiovanniBussi/travis-ci-macports/master/install.macports
      - ./install.macports
 
