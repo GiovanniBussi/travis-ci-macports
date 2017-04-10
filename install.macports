@@ -64,6 +64,9 @@ fi
 # update:
 export PATH="$MACPORTS_PREFIX/bin:$PATH"
 
+
+SOURCES="${MACPORTS_PREFIX}"/etc/macports/sources.conf
+
 # using tarball for update:
 ## awk '{if($NF=="[default]") print "https://distfiles.macports.org/ports.tar.gz [default]";}' "$SOURCES" > $$.tmp
 ## sudo mv -f $$.tmp "$SOURCES"
