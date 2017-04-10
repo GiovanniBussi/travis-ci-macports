@@ -64,6 +64,11 @@ fi
 # update:
 export PATH="$MACPORTS_PREFIX/bin:$PATH"
 
+# using tarball for update:
+
+awk '{if($NF=="[default]") print "https://distfiles.macports.org/ports.tar.gz [default]";}' "$SOURCES" > $$.tmp
+sudo mv -f $$.tmp "$SOURCES"
+
 i=0
 # run through a while to retry upon failure
 while true
