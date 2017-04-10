@@ -76,8 +76,8 @@ cd "$MACPORTS_PREFIX"/var/macports/sources
 sudo mkdir -p github.com/macports/macports-ports/
 sudo chown -R $USER:admin github.com
 git clone https://github.com/macports/macports-ports.git github.com/macports/macports-ports/
-awk '{if($NF=="[default]") print "file:///opt/local/var/macports/sources/github.com/macports/macports-ports/";}' "$SOURCES" > $$.tmp
-sudo mv -f $$.tmp "$SOURCES"
+awk '{if($NF=="[default]") print "file:///opt/local/var/macports/sources/github.com/macports/macports-ports/";}' "$SOURCES" > $HOME/$$.tmp
+sudo mv -f $HOME/$$.tmp "$SOURCES"
 
 i=0
 # run through a while to retry upon failure
