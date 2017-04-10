@@ -45,9 +45,9 @@ In case you just need ports to install tools that are used in your project,
 you are done. If you want to also setup a 
 [local Portfile repository](https://guide.macports.org/chunked/development.local-repositories.html) to test your own Portfiles you might do the following:
 
-     - wget https://raw.githubusercontent.com/GiovanniBussi/travis-ci-macports/master/configure.macports
-     - chmod +x ./configure.macports
-     - ./configure.macports path/to/port/dir
+     - wget https://raw.githubusercontent.com/GiovanniBussi/travis-ci-macports/master/config.macports
+     - chmod +x ./config.macports
+     - ./config.macports path/to/port/dir
 
 After this command, you will be able to install packages described in your local Portfiles.
 Notice that local Portfiles will take the precedence with respect to official Portfiles.
