@@ -39,3 +39,6 @@ script:
   - PATH="/opt/local/bin:$PATH"
   - PATH="/opt/local-test/bin:$PATH"
   - sudo port -N install xdrfile
+  - sudo port -N uninstall xdrfile
+  - ./config.macports test_portfiles
+  - sudo port -N install xdrfile1

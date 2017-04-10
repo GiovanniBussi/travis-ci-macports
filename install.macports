@@ -63,7 +63,7 @@ fi
 
 # update:
 export PATH="$MACPORTS_PREFIX/bin:$PATH"
-sudo port -N -v sync
+sudo port -N -v selfupdate
 
 dir="$PWD"
 cd -
