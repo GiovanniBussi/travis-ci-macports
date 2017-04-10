@@ -3,42 +3,31 @@ language: objective-c
 matrix:
   include:
   - osx_image: xcode7.3
-    env: OPT=--binary
   - osx_image: xcode8gm
-    env: OPT=--binary
   - osx_image: xcode8.1
-    env: OPT=--binary
   - osx_image: xcode8.2
-    env: OPT=--binary
   - osx_image: xcode8.3
-    env: OPT=--binary
   - osx_image: xcode7.3
-    env: OPT=--source
+    env: PRE=$HOME/opt
   - osx_image: xcode8gm
-    env: OPT=--source
+    env: PRE=$HOME/opt
   - osx_image: xcode8.1
-    env: OPT=--source
+    env: PRE=$HOME/opt
   - osx_image: xcode8.2
-    env: OPT=--source
+    env: PRE=$HOME/opt
   - osx_image: xcode8.3
-    env: OPT=--source
-  - osx_image: xcode7.3
-    env: OPT=--prefix=/opt/local-test
-  - osx_image: xcode8gm
-    env: OPT=--prefix=/opt/local-test
-  - osx_image: xcode8.1
-    env: OPT=--prefix=/opt/local-test
-  - osx_image: xcode8.2
-    env: OPT=--prefix=/opt/local-test
-  - osx_image: xcode8.3
-    env: OPT=--prefix=/opt/local-test
+    env: PRE=$HOME/opt
 
 script:
-  - ./install.macports "$OPT"
+# this is required for curl to work correctly:
+  - export COLUMNS=80
+  - if test -z "$PRE" ; then PRE=/opt/local ; fi
+  - ./install.macports --prefix="$PRE"
+  - PATH="$PRE/bin:$PATH"
+  - which port
 # install a small port for test:
-  - PATH="/opt/local/bin:$PATH"
-  - PATH="/opt/local-test/bin:$PATH"
   - sudo port -N install xdrfile
   - sudo port -N uninstall xdrfile
-  - ./config.macports test_portfiles
+  - ./config.macports --prefix="$PRE" test_portfiles
+# install a small local port for test:
   - sudo port -N install xdrfile1

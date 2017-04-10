@@ -14,6 +14,9 @@ long_description    This library allows to read GROMACS trr and xtc files and al
                     to incorporate it any way you want in other libraries or executables, no \
                     matter what the final license is.
 
+distfiles           xdrfile-${version}.tar.gz
+worksrcdir          xdrfile-${version}
+
 platforms           darwin
 
 homepage            http://www.gromacs.org/Developer_Zone/Programming_Guide/XTC_Library

@@ -3,13 +3,10 @@
 set -e
 set -x
 
-MACPORTS_PREFIX=/opt/local
-
 for opt
 do
   case "$opt" in
-  (--prefix=*) MACPORTS_PREFIX="${opt#--prefix=}" ;;
-  (*) ports="$OPT" ;;
+  (*) ports="$opt" ;;
   esac
 done
 
@@ -17,16 +14,19 @@ if ! test -d "$ports" ; then
   echo "Please provide a port directory"
 fi
 
+w=$(which port)
+
+MACPORTS_PREFIX="${w%/bin/port}"
+
 cd "$ports"
 
-ports="$pwd"
+ports="$(pwd)"
 
 echo "Portdir fullpath: $ports"
 SOURCES="${MACPORTS_PREFIX}"/etc/macports/sources.conf
 
-sudo awk -v repo="file://$ports" '{if($NF=="[default]") print repo; print}' "$SOURCES" > "$SOURCES".tmp
-sudo mv -f "$SOURCES".tmp "$SOURCES"
-export PATH="$MACPORTS_PREFIX/bin:$PATH"
+awk -v repo="file://$ports" '{if($NF=="[default]") print repo; print}' "$SOURCES" > $$.tmp
+sudo mv -f $$.tmp "$SOURCES"
 
 portindex
 
