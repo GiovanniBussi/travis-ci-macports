@@ -68,7 +68,7 @@ i=0
 # run through a while to retry upon failure
 while true
 do
-  sudo port -N -v selfupdate && break
+  sudo port -N -v selfupdate && break || true
   sleep 5
   i=$((i+1))
   if ((i>10)) ; then
