@@ -65,8 +65,15 @@ fi
 export PATH="$MACPORTS_PREFIX/bin:$PATH"
 
 # using tarball for update:
+## awk '{if($NF=="[default]") print "https://distfiles.macports.org/ports.tar.gz [default]";}' "$SOURCES" > $$.tmp
+## sudo mv -f $$.tmp "$SOURCES"
 
-awk '{if($NF=="[default]") print "https://distfiles.macports.org/ports.tar.gz [default]";}' "$SOURCES" > $$.tmp
+# using github for update:
+cd "$MACPORTS_PREFIX"/var/macports/sources
+sudo mkdir -p github.com/macports/macports-ports/
+sudo chown -R $USER:admin github.com
+git clone https://github.com/macports/macports-ports.git github.com/macports/macports-ports/
+awk '{if($NF=="[default]") print "file:///opt/local/var/macports/sources/github.com/macports/macports-ports/";}' "$SOURCES" > $$.tmp
 sudo mv -f $$.tmp "$SOURCES"
 
 i=0
