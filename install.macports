@@ -66,12 +66,13 @@ export PATH="$MACPORTS_PREFIX/bin:$PATH"
 
 i=0
 # run through a while to retry upon failure
-while ! sudo port -N -v selfupdate
+while true
 do
+  sudo port -N -v selfupdate && break
   sleep 5
   i=$((i+1))
-  if ((i>10)) ;then
-    break;
+  if ((i>10)) ; then
+    break
   fi
 done
 
