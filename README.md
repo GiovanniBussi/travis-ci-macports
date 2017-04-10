@@ -18,6 +18,7 @@ Put the following commands in your `.travis.yml` file:
 
      - export COLUMNS=80
      - wget https://raw.githubusercontent.com/GiovanniBussi/travis-ci-macports/master/install.macports
+     - chmod +x ./install.macports
      - ./install.macports
 
 If you prefer, you can directly include the `./install.macports` file in your github repository.
@@ -45,6 +46,7 @@ you are done. If you want to also setup a
 [local Portfile repository](https://guide.macports.org/chunked/development.local-repositories.html) to test your own Portfiles you might do the following:
 
      - wget https://raw.githubusercontent.com/GiovanniBussi/travis-ci-macports/master/configure.macports
+     - chmod +x ./configure.macports
      - ./configure.macports path/to/port/dir
 
 After this command, you will be able to install packages described in your local Portfiles.
