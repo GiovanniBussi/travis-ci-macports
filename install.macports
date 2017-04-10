@@ -63,7 +63,18 @@ fi
 
 # update:
 export PATH="$MACPORTS_PREFIX/bin:$PATH"
-sudo port -N -v selfupdate
+
+i=0
+# run through a while to retry upon failure
+while ! sudo port -N -v selfupdate
+do
+  sleep 5
+  i=$((i+1))
+  if ((i>10)) ;then
+    break;
+  fi
+done
+
 
 dir="$PWD"
 cd -
