@@ -5,6 +5,7 @@ set -x
 
 MACPORTS_VERSION=2.4.1
 MACPORTS_PREFIX=/opt/local
+MACPORTS_SYNC=rsync
 
 for opt
 do
@@ -13,6 +14,7 @@ do
   (--binary) SOURCE=no ;;
   (--version=*) MACPORTS_VERSION="${opt#--version=}" ;;
   (--prefix=*) MACPORTS_PREFIX="${opt#--prefix=}" ;;
+  (--sync=*) MACPORTS_SYNC="${opt#--sync=}" ;;
   (*) echo "unknown option $opt"
       exit 1 ;;
   esac
@@ -67,17 +69,27 @@ export PATH="$MACPORTS_PREFIX/bin:$PATH"
 
 SOURCES="${MACPORTS_PREFIX}"/etc/macports/sources.conf
 
-# using tarball for update:
-awk '{if($NF=="[default]") print "https://distfiles.macports.org/ports.tar.gz [default]"; else print}' "$SOURCES" > $$.tmp
-sudo mv -f $$.tmp "$SOURCES"
-
-# using github for update:
-## cd "$MACPORTS_PREFIX"/var/macports/sources
-## sudo mkdir -p github.com/macports/macports-ports/
-## sudo chown -R $USER:admin github.com
-## git clone https://github.com/macports/macports-ports.git github.com/macports/macports-ports/
-## awk '{if($NF=="[default]") print "file:///opt/local/var/macports/sources/github.com/macports/macports-ports/"; else print}' "$SOURCES" > $HOME/$$.tmp
-## sudo mv -f $HOME/$$.tmp "$SOURCES"
+case "$MACPORTS_SYNC" in
+(rsync)
+  echo "Using rsync (default)"
+  ;;
+(github)
+   cd "$MACPORTS_PREFIX"/var/macports/sources
+   sudo mkdir -p github.com/macports/macports-ports/
+   sudo chown -R $USER:admin github.com
+   git clone https://github.com/macports/macports-ports.git github.com/macports/macports-ports/
+   awk '{if($NF=="[default]") print "file:///opt/local/var/macports/sources/github.com/macports/macports-ports/"; else print}' "$SOURCES" > $HOME/$$.tmp
+   sudo mv -f $HOME/$$.tmp "$SOURCES"
+   cd -
+  ;;
+(tarball)
+  awk '{if($NF=="[default]") print "https://distfiles.macports.org/ports.tar.gz [default]"; else print}' "$SOURCES" > $$.tmp
+  sudo mv -f $$.tmp "$SOURCES"
+  ;;
+(*)
+  echo "Unknown sync mode $MACPORTS_SYNC"
+  ;;
+esac
 
 i=0
 # run through a while to retry upon failure
