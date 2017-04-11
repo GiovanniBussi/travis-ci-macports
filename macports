@@ -1,11 +1,16 @@
 #! /bin/bash
 
-set -e
-set -x
-
 MACPORTS_VERSION=2.4.1
 MACPORTS_PREFIX=/opt/local
 MACPORTS_SYNC=tarball
+
+action=$1
+shift
+
+case "$action" in
+(install)
+
+echo "macports-ci: install"
 
 for opt
 do
@@ -15,18 +20,17 @@ do
   (--version=*) MACPORTS_VERSION="${opt#--version=}" ;;
   (--prefix=*) MACPORTS_PREFIX="${opt#--prefix=}" ;;
   (--sync=*) MACPORTS_SYNC="${opt#--sync=}" ;;
-  (*) echo "unknown option $opt"
+  (*) echo "macports-ci: unknown option $opt"
       exit 1 ;;
   esac
 done
 
 if test "$MACPORTS_PREFIX" != /opt/local ; then
-  echo "Installing on non standard prefix can be only made from sources"
+  echo "macports-ci: Installing on non standard prefix $MACPORTS_PREFIX can be only made from sources"
   SOURCE=yes
 fi
 
-cd "$(mktemp -d)"
-
+pushd "$(mktemp -d)"
 
 OSX_VERSION="$(sw_vers -productVersion | sed 's/\.[^\.]*$//')"
 
@@ -45,8 +49,6 @@ MACPORTS_PKG=MacPorts-${MACPORTS_VERSION}-${OSX_VERSION}-${OSX_NAME}.pkg
 
 URL="https://distfiles.macports.org/MacPorts"
 URL="https://github.com/macports/macports-base/releases/download/v$MACPORTS_VERSION/"
-
-# github: https://github.com/macports/macports-base/releases/download/v2.4.1/MacPorts-2.4.1.tar.gz
 
 if test "$SOURCE" = yes ; then
 # download source:
@@ -75,13 +77,13 @@ case "$MACPORTS_SYNC" in
   ;;
 (github)
   echo "Using github"
-   cd "$MACPORTS_PREFIX"/var/macports/sources
+   pushd "$MACPORTS_PREFIX"/var/macports/sources
    sudo mkdir -p github.com/macports/macports-ports/
    sudo chown -R $USER:admin github.com
    git clone https://github.com/macports/macports-ports.git github.com/macports/macports-ports/
    awk '{if($NF=="[default]") print "file:///opt/local/var/macports/sources/github.com/macports/macports-ports/"; else print}' "$SOURCES" > $HOME/$$.tmp
    sudo mv -f $HOME/$$.tmp "$SOURCES"
-   cd -
+   popd
   ;;
 (tarball)
   echo "Using tarball (default)"
@@ -107,6 +109,50 @@ done
 
 
 dir="$PWD"
-cd -
+popd
 sudo rm -fr $dir
+
+;;
+
+(localports)
+
+echo "macports-ci: localports"
+
+for opt
+do
+  case "$opt" in
+  (*) ports="$opt" ;;
+  esac
+done
+
+if ! test -d "$ports" ; then
+  echo "Please provide a port directory"
+  exit 1
+fi
+
+w=$(which port)
+
+MACPORTS_PREFIX="${w%/bin/port}"
+
+cd "$ports"
+
+ports="$(pwd)"
+
+echo "Portdir fullpath: $ports"
+SOURCES="${MACPORTS_PREFIX}"/etc/macports/sources.conf
+
+awk -v repo="file://$ports" '{if($NF=="[default]") print repo; print}' "$SOURCES" > $$.tmp
+sudo mv -f $$.tmp "$SOURCES"
+
+portindex
+
+;;
+
+(*)
+echo "unknown action $action"
+
+esac
+
+
+
 
