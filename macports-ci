@@ -18,17 +18,27 @@ do
   (--source) SOURCE=yes ;;
   (--binary) SOURCE=no ;;
   (--version=*) MACPORTS_VERSION="${opt#--version=}" ;;
-  (--prefix=*) MACPORTS_PREFIX="${opt#--prefix=}" ;;
-  (--sync=*) MACPORTS_SYNC="${opt#--sync=}" ;;
+  (--prefix=*)  MACPORTS_PREFIX="${opt#--prefix=}" ;;
+  (--sync=*)    MACPORTS_SYNC="${opt#--sync=}" ;;
   (*) echo "macports-ci: unknown option $opt"
       exit 1 ;;
   esac
 done
 
+echo "macports-ci: prefix=$MACPORTS_PREFIX"
+
 if test "$MACPORTS_PREFIX" != /opt/local ; then
   echo "macports-ci: Installing on non standard prefix $MACPORTS_PREFIX can be only made from sources"
   SOURCE=yes
 fi
+
+if [ $SOURCE = yes ] ; then
+  echo "macports-ci: Installing from source"
+else
+  echo "macports-ci: Installing from binary"
+fi
+
+echo "macports-ci: Sync mode=$MACPORTS_SYNC"
 
 pushd "$(mktemp -d)"
 
@@ -41,14 +51,18 @@ elif test "$OSX_VERSION" == 10.11 ; then
 elif test "$OSX_VERSION" == 10.12 ; then
   OSX_NAME=Sierra
 else
-  echo "unknown OSX version"
+  echo "macports-ci: Unknown OSX version $OSX_VERSION"
   exit 1
 fi
+
+echo "macports-ci: OSX version $OSX_VERSION $OSX_NAME"
 
 MACPORTS_PKG=MacPorts-${MACPORTS_VERSION}-${OSX_VERSION}-${OSX_NAME}.pkg
 
 URL="https://distfiles.macports.org/MacPorts"
 URL="https://github.com/macports/macports-base/releases/download/v$MACPORTS_VERSION/"
+
+echo "macports-ci: Base URL is $URL"
 
 if test "$SOURCE" = yes ; then
 # download source:
@@ -57,7 +71,7 @@ if test "$SOURCE" = yes ; then
   cd MacPorts-${MACPORTS_VERSION}
 # install
   ./configure --prefix="$MACPORTS_PREFIX" --with-applications-dir="$MACPORTS_PREFIX/Applications" >/dev/null &&
-  sudo make install >/dev/null
+    sudo make install >/dev/null
 else
 # download installer:
   wget $URL/$MACPORTS_PKG
@@ -67,7 +81,6 @@ fi
 
 # update:
 export PATH="$MACPORTS_PREFIX/bin:$PATH"
-
 
 SOURCES="${MACPORTS_PREFIX}"/etc/macports/sources.conf
 

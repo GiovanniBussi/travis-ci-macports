@@ -27,12 +27,12 @@ script:
 # this is required for curl to work correctly:
   - export COLUMNS=80
   - if test -z "$PRE" ; then PRE=/opt/local ; fi
-  - ./install.macports --prefix="$PRE" $OPT
+  - ./macports-ci install --prefix="$PRE" $OPT
   - PATH="$PRE/bin:$PATH"
   - which port
 # install a small port for test:
   - sudo port -N install xdrfile
   - sudo port -N uninstall xdrfile
-  - ./config.macports --prefix="$PRE" test_portfiles
+  - ./macports-ci localports test_portfiles
 # install a small local port for test:
   - sudo port -N install xdrfile1
